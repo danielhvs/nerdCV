@@ -1,0 +1,11 @@
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.11.0"}
+        clj-pdf/clj-pdf {:mvn/version "2.3.2"}}
+ :aliases
+ {:dev
+  {:extra-deps
+   {io.github.clojure/tools.build {:mvn/version "0.9.4"}
+    org.clojure/tools.nrepl {:mvn/version "0.2.12"}}
+   :extra-paths ["dev"]}
+  :runner
+  {:main-opts ["-m" "nerd-cv.core"]}}}
