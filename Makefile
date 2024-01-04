@@ -1,5 +1,5 @@
 repl:
 	clj -A:dev
 
-run:
-	clj -M:runner
+sample:
+	clj -M:runner resources/sample.edn resources/profile.jpg
