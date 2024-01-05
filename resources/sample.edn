@@ -1,10 +1,14 @@
 {:name "Lorem Ipsum Dolor Sit Amet"
+ :educations [{:name "Bachelor of Bla Lol Moar"
+               :company "Federal University of Somewhere, Somewhere, Earth (1996 - 2001)" } 
+              {:name "Postgraduate in Bla Mrng"
+               :company "Faculdade Juljwi, Aplace, Brizola (2003 - 2005)"} ]
  :skills ["Lorem ipsum dolor " " sit amet, officia " " excepteur ex fugiat " " reprehenderit enim labore " " culpa sint ad " " nisi Lorem pariatur " " mollit ex esse"]
  :summary ["Proin laoreet quis felis ac mollis. Nullam lectus dolor, euismod non elit quis, placerat euismod libero. Integer blandit metus sit amet diam auctor. With more than 999 years of software development experience, I am a Nullam varius sodales iaculis."
            "I have a bachelor degree in Bla Lol but I've bla from 2012 until lol. I'm an open minded bla bal person and have strong lol bla moar. Will try to bla lol huabr to use the coisos. Although am capable of bla bla, I do not bla from moar."]
  :contact {:email "blabla@gmail.com"
            :slack "@foobar"
-           :github "lolmoar"
+           :github {:label "lolmoar" :target "https://lol.com/"}
            :phone "+9999999999999"}
  :projects [{:name "Lorem Ipsum Dolor Sit Amet"
              :company "Kojajwenm (Acre)"
