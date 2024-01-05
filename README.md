@@ -2,6 +2,15 @@
 
 This simple project provides a template for creating professional CVs with ease. Users can input their data and include a profile picture to generate a CV.
 
+## TLDR
+
+Call the below but pass your own edn and image file.
+```
+clj -M:runner resources/sample.edn resources/profile.jpg
+```
+
+The result is a `cv.pdf` file
+
 ## Usage
 
 1. Clone the repository:
