@@ -18,10 +18,15 @@
 (def top-margin 10)
 (def bottom-margin 10)
 
+(defn- spacers
+  []
+  [[:pdf-cell {:set-border [:top] :border-color sidebar-background}
+    [:spacer 1]]])
+
 (defn- sidebar-contacts
   [k v]
   (into []
-        [[:pdf-cell {:set-border []}
+        [[:pdf-cell {:set-border [:top] :border-color sidebar-background}
           [:phrase [:list
                     [:heading {:style {:size 10 :color sidebar-text-color}} (str k ": ")]
                     (let [target (:target v)] ; external link
@@ -32,7 +37,7 @@
 
 (defn- sidebar-skills
   [v]
-  [[:pdf-cell {:set-border []}
+  [[:pdf-cell {:set-border [:top] :border-color sidebar-background}
     [:phrase
      [:list
       [:phrase {:color sidebar-text-color} v]]]]])
@@ -79,19 +84,22 @@
                           :width-percent 100}
               [30 70]
               [(let [base [:pdf-table {:set-border [], :background-color sidebar-background} [1]
-                           [[:pdf-cell {:set-border []} [:image {:xscale 0.25 :yscale 0.25 :align :center} profile-picture]]]
-                           [[:pdf-cell {:set-border []} [:heading {:style {:align :center :size 20 :color sidebar-text-color}} (:name cv)]]]
-                           [[:pdf-cell {:set-border []} [:heading {:style {:align :center :size 14 :color sidebar-text-color}} "Software Engineer"]]]]]
+                           [[:pdf-cell {:set-border [:top] :border-color sidebar-background} [:image {:xscale 0.25 :yscale 0.25 :align :center} profile-picture]]]
+                           [[:pdf-cell {:set-border [:top] :border-color sidebar-background} [:heading {:style {:align :center :size 20 :color sidebar-text-color}} (:name cv)]]]
+                           [[:pdf-cell {:set-border [:top] :border-color sidebar-background} [:heading {:style {:align :center :size 14 :color sidebar-text-color}} "Software Engineer"]]]]]
                  (-> base
-                     (into [[[:pdf-cell [:spacer 2]]]])
-                     (into [[[:pdf-cell {:set-border []} [:heading {:style {:size 12 :color sidebar-text-color}} "Contact"]]]])
+                     (into [[[:pdf-cell {:set-border [:top] :border-color sidebar-background} [:spacer 2]]]])
+                     (into [[[:pdf-cell {:set-border [:top] :border-color sidebar-background} [:heading {:style {:size 12 :color sidebar-text-color}} "Contact"]]]])
                      (into (for [contact-kw (keys contact)
                                  :let [contact (contact-kw contact)]]
                              (sidebar-contacts (name contact-kw) contact)))
-                     (into [[[:pdf-cell {:set-border []} [:heading {:style {:size 12 :color sidebar-text-color}} "Skills"]]]])
+                     (into (for [_n (range 2)]
+                             (spacers)))
+                     (into [[[:pdf-cell {:set-border [:top] :border-color sidebar-background} [:heading {:style {:size 12 :color sidebar-text-color}} "Skills"]]]])
                      (into (for [skill (:skills cv)]
                              (sidebar-skills skill)))
-                     (into [[[:pdf-cell [:spacer 20]]]])))
+                     (into (for [_n (range 22)]
+                             (spacers)))))
                (let [base [:pdf-table {:width-percent 100} [1]
                            [[:pdf-cell {:set-border []}
                              [:paragraph (chunk-title "Summary") (format-summary (:summary cv))]]]
