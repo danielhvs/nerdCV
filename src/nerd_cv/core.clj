@@ -61,6 +61,14 @@
 (defn- format-summary [summary]
   (str/join "\n" (map paragraph summary)))
 
+(defn- education-section
+  [education]
+  (into []
+        [[:cell
+          [:list {:symbol ""}
+           [:heading {:style {:size 12 :color content-text-color}} (:name education)]
+           [:heading {:style {:size 10 :color content-text-color}} (:company education)]]]]))
+
 (defn- project-section
   [project]
   (into []
@@ -74,10 +82,14 @@
             [:chunk (format-summary [(str/join ", " (:tech project))])]]]]]))
 
 (defn- content
-  [{:keys [projects summary]}]
+  [{:keys [educations projects summary]}]
   [:table (table-style)
-   [[:cell {:align :left, :rowspan 1} [:paragraph (format-summary summary)]]]
-   [[:cell {:rowspan 200}
+   [[:cell {:align :left, } [:paragraph (format-summary summary)]]]
+   [[:cell #_{:rowspan 200}
+     (into [:table (table-style)]
+           (for [education educations]
+             (education-section education)))]]
+   [[:cell #_{:rowspan 200}
      (into [:table (table-style)]
            (for [project projects]
              (project-section project)))]]])
