@@ -14,16 +14,17 @@ This simple project provides a template for creating professional CVs with ease.
    cd nerdCV
    ```
 
-3. Make a sample to check it out:
+3. Make a sample to check it out by using either of the below:
+
    ```bash
    make sample
    ```
-or
+
    ```bash
 	clj -M:runner resources/sample.edn resources/profile.jpg
    ```
 
-4. Create your `data.edn` file with your information but using the same template. Also include your profile picture, for example `profile.png`
+4. Create your `data.edn` file with your information but using the same template (`resources/sample.edn`). Also include your profile picture, for example `profile.png`.
 
 5. Generate your CV:
    ```bash
