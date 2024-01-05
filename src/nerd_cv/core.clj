@@ -8,14 +8,6 @@
 
 (defonce fonts (g/g2d-register-fonts [[".fonts/", true]]))
 
-(def debug? false)
-(def debug-border {:border true :cell-border true})
-(defn- table-style
-  ([style]
-   (merge style (when debug? debug-border)))
-  ([]
-   (table-style {})))
-
 ;; colors
 (def sidebar-background [0 0 128])
 (def sidebar-text-color (map #(- % 25) [255 255 255]))
@@ -28,36 +20,22 @@
 
 (defn- sidebar-contacts
   [k v]
-  [:phrase [:list
-            [:heading {:style {:size 10 :color sidebar-text-color}} k]
-            (let [target (:target v)] ;; external link
-              (if target
-                [:paragraph
-                 [:anchor {:color sidebar-text-color :styles [:underline] :target target} (:label v)]]
-                [:phrase {:color sidebar-text-color} v]))]])
+  (into []
+        [[:pdf-cell {:set-border []}
+          [:phrase [:list
+                    [:heading {:style {:size 10 :color sidebar-text-color}} (str k ": ")]
+                    (let [target (:target v)] ; external link
+                      (if target
+                        [:paragraph
+                         [:anchor {:color sidebar-text-color :styles [:underline] :target target} (:label v)]]
+                        [:phrase {:color sidebar-text-color} v]))]]]]))
 
 (defn- sidebar-skills
   [v]
-  [:phrase
-   [:list
-    [:phrase {:color sidebar-text-color} v]]])
-
-(defn- sidebar
-  [cv contact profile-picture]
-  [:table (table-style {:background-color sidebar-background})
-   [[:cell {:rowspan 1} [:image #_{:xscale 0.15 :yscale 0.15 :align :center} profile-picture]]]
-   [[:cell {:rowspan 1 :align :center} [:heading {:style {:size 20 :color sidebar-text-color}} (:name cv)]]]
-   [[:cell {:rowspan 1 :align :center}
-     [:heading {:style {:size 14 :color sidebar-text-color}} "Software Engineer"]]]
-   [[:cell {:align :left}
-     [:heading {:style {:size 12 :color sidebar-text-color}} "Contact"]
-     (into [:list {:symbol " "}] (for [contact-kw (keys contact)
-                                       :let [contact (contact-kw contact)]]
-                                   (sidebar-contacts (name contact-kw) contact)))]]
-   [[:cell {:rowspan 1000, :align :left}
-     [:heading {:style {:size 12 :color sidebar-text-color}} "Skills"]
-     (into [:list {:symbol " "}] (for [skill (:skills cv)]
-                                   (sidebar-skills skill)))]]])
+  [[:pdf-cell {:set-border []}
+    [:phrase
+     [:list
+      [:phrase {:color sidebar-text-color} v]]]]])
 
 (defn- paragraph [text]
   (str "    " text))
@@ -76,27 +54,17 @@
 (defn- project-section
   [project]
   (into []
-        [[:cell
+        [[:pdf-cell {:set-border []}
           [:list {:symbol ""}
-           [:heading {:style {:size 12 :color content-text-color}} (str "Project: " (:name project))]
+           [:heading {:style {:size 12 :color content-text-color}} (:name project)]
            [:heading {:style {:size 10 :color content-text-color}} (str "Company: " (:company project))]
            [:phrase (format-summary (:description project))]
            [:phrase
             [:chunk {:style :bold} (str "Technologies: ")]
-            [:chunk (format-summary [(str/join ", " (:tech project))])]]]]]))
+            [:chunk (str/join ", " (:tech project))]]]]]))
 
-(defn- content
-  [{:keys [educations projects summary]}]
-  [:table (table-style)
-   [[:cell {:align :left} [:paragraph (format-summary summary)]]]
-   [[:cell #_{:rowspan 200}
-     (into [:table (table-style)]
-           (for [education educations]
-             (education-section education)))]]
-   [[:cell #_{:rowspan 200}
-     (into [:table (table-style)]
-           (for [project projects]
-             (project-section project)))]]])
+(defn- chunk-title [text]
+  [:chunk {:size 18 :styles [:bold :underline]} (str text "\n")])
 
 (defn create-cv
   [{:keys [contact] :as cv} profile-picture cv-filename]
@@ -107,29 +75,33 @@
               :top-margin top-margin
               :bottom-margin bottom-margin}
              [:pdf-table {:horizontal-align :center
-                          #_#_:width-percent 100}
+                          :set-border []
+                          :width-percent 100}
               [30 70]
-              [[:pdf-table {:background-color sidebar-background} [1]
-                [[:pdf-cell [:image {:xscale 0.15 :yscale 0.15 :align :center} profile-picture]]]
-                [[:pdf-cell [:heading {:style {:size 20 :color sidebar-text-color}} (:name cv)]]]
-                [[:pdf-cell [:heading {:style {:size 14 :color sidebar-text-color}} "Software Engineer"]]]
-                [[:pdf-cell [:heading {:style {:size 12 :color sidebar-text-color}} "Contact"]]]
-                #_(into [:list {:symbol " "}] (for [contact-kw (keys contact)
-                                                    :let [contact (contact-kw contact)]]
-                                                (sidebar-contacts (name contact-kw) contact)))
-
-                ["dqjpodq"]
-                ["dqjpodq"]
-                ["dqjpodq"]
-                ["dqjpodq"]]
-               #_[:pdf-cell [:heading {:style {:size 20 :color sidebar-text-color}} (:name cv)]]
-               (into [:pdf-table {} [1]
-                      [[:pdf-cell {:set-border []}
-                        [:paragraph [:chunk {:style :bold} "Summary:\n"] (format-summary (:summary cv))]]]
-                      [[:pdf-cell {:set-border []}
-                        [:paragraph [:chunk {:style :bold} "Education:\n"]]]]]
-                     (for [education (:educations cv)]
-                       (education-section education)))]]]]
+              [(let [base [:pdf-table {:set-border [], :background-color sidebar-background} [1]
+                           [[:pdf-cell {:set-border []} [:image {:xscale 0.15 :yscale 0.15 :align :center} profile-picture]]]
+                           [[:pdf-cell {:set-border []} [:heading {:style {:align :center :size 20 :color sidebar-text-color}} (:name cv)]]]
+                           [[:pdf-cell {:set-border []} [:heading {:style {:size 14 :color sidebar-text-color}} "Software Engineer"]]]
+                           [[:pdf-cell {:set-border []} [:heading {:style {:size 12 :color sidebar-text-color}} "Contact"]]]]]
+                 (-> base
+                     (into (for [contact-kw (keys contact)
+                                 :let [contact (contact-kw contact)]]
+                             (sidebar-contacts (name contact-kw) contact)))
+                     (into [[[:pdf-cell {:set-border []} [:heading {:style {:size 12 :color sidebar-text-color}} "Skills"]]]])
+                     (into (for [skill (:skills cv)]
+                             (sidebar-skills skill)))))
+               (let [base [:pdf-table {:width-percent 100} [1]
+                           [[:pdf-cell {:set-border []}
+                             [:paragraph (chunk-title "Summary") (format-summary (:summary cv))]]]
+                           [[:pdf-cell {:set-border []}
+                             [:paragraph (chunk-title "Education")]]]]]
+                 (-> base
+                     (into (for [education (:educations cv)]
+                             (education-section education)))
+                     (into [[[:pdf-cell {:set-border []}
+                              [:paragraph (chunk-title "Projects")]]]])
+                     (into (for [project (:projects cv)]
+                             (project-section project)))))]]]]
 
     (pdf/pdf doc cv-filename)
     cv-filename))
