@@ -9,7 +9,7 @@ Call the below but pass your own edn and image file.
 clj -M:runner resources/sample.edn resources/profile.jpg
 ```
 
-The result is a `cv.pdf` file
+The result is a [cv.pdf](cv.pdf) file
 
 ## Usage
 
