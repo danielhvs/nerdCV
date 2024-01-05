@@ -30,7 +30,11 @@
   [k v]
   [:phrase [:list
             [:heading {:style {:size 10 :color sidebar-text-color}} k]
-            [:phrase {:color sidebar-text-color} v]]])
+            (let [target (:target v)] ;; external link
+              (if target
+                [:paragraph
+                 [:anchor {:color sidebar-text-color :styles [:underline] :target target} (:label v)]]
+                [:phrase {:color sidebar-text-color} v]))]])
 
 (defn- sidebar-skills
   [v]
