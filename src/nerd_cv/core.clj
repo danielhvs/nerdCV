@@ -128,12 +128,12 @@
     (catch RuntimeException e
       (printf "Error parsing edn file '%s': %s\n" source (.getMessage e)))))
 
-(defn -main [& [data picture]]
+(defn -main [& [data picture output-file-path]]
   (if-not (and  data picture)
     (println "Usage: need to pass the edn path and the profile picture path.\nExample: clj -M:runner ~/Downloads/cv.edn ~/Downloads/profile.png")
     (let [cv (-> data
                  load-edn
-                 (create-cv picture "cv.pdf"))]
+                 (create-cv picture (or output-file-path "cv.pdf")))]
       (println cv))))
 
 (comment
