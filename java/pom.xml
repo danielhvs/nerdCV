@@ -14,9 +14,36 @@
         <maven.jar.mainClass>danielhvs.nerdCV.Main</maven.jar.mainClass> <!-- Add this line -->
     </properties>
 
+    <dependencies>
+      <!-- pdf -->
+      <dependency>
+        <groupId>com.github.librepdf</groupId>
+        <artifactId>openpdf</artifactId>
+        <version>1.3.35</version>
+      </dependency>
+      <!-- JUnit 5 -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.7.2</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>5.7.2</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
+          <plugin>
+            <!-- This plugin is used to execute the tests -->
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.22.2</version>
+          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
