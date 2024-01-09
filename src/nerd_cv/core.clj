@@ -62,7 +62,8 @@
         [[:pdf-cell {:set-border []}
           [:list {:symbol ""}
            [:spacer 1]
-           [:heading {:style {:size 12 :color content-text-color}} (:company project)]
+           [:paragraph {:size 14 :color content-text-color} (:company project)]
+           [:heading {:style {:size 13 :color content-text-color}} (str/join " | " (:titles project))]
            [:phrase (format-summary (:description project))]
            [:phrase
             [:chunk {:style :bold} (str "Technologies: ")]
