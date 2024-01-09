@@ -56,13 +56,13 @@
            [:paragraph {:style :bold, :color content-text-color} name]
            [:paragraph {:color content-text-color} company]]]]))
 
-(defn- project-section
+(defn- experience-section
   [project]
   (into []
         [[:pdf-cell {:set-border []}
           [:list {:symbol ""}
-           [:heading {:style {:size 12 :color content-text-color}} (:name project)]
-           [:heading {:style {:size 10 :color content-text-color}} (str "Company: " (:company project))]
+           [:spacer 1]
+           [:heading {:style {:size 12 :color content-text-color}} (:company project)]
            [:phrase (format-summary (:description project))]
            [:phrase
             [:chunk {:style :bold} (str "Technologies: ")]
@@ -105,9 +105,9 @@
                              [:paragraph (chunk-title "Summary") (format-summary (:summary cv))]]]]]
                  (-> base
                      (into [[[:pdf-cell {:set-border []}
-                              [:paragraph (chunk-title "Projects")]]]])
+                              [:paragraph (chunk-title "Experience")]]]])
                      (into (for [project (:projects cv)]
-                             (project-section project)))
+                             (experience-section project)))
                      (into [[[:pdf-cell {:set-border []}
                               [:paragraph (chunk-title "Education")]]]])
                      (into (for [education (:educations cv)]
