@@ -102,16 +102,16 @@
                              (spacers)))))
                (let [base [:pdf-table {:width-percent 100} [1]
                            [[:pdf-cell {:set-border []}
-                             [:paragraph (chunk-title "Summary") (format-summary (:summary cv))]]]
-                           [[:pdf-cell {:set-border []}
-                             [:paragraph (chunk-title "Education")]]]]]
+                             [:paragraph (chunk-title "Summary") (format-summary (:summary cv))]]]]]
                  (-> base
-                     (into (for [education (:educations cv)]
-                             (education-section education)))
                      (into [[[:pdf-cell {:set-border []}
                               [:paragraph (chunk-title "Projects")]]]])
                      (into (for [project (:projects cv)]
-                             (project-section project)))))]]]]
+                             (project-section project)))
+                     (into [[[:pdf-cell {:set-border []}
+                              [:paragraph (chunk-title "Education")]]]])
+                     (into (for [education (:educations cv)]
+                             (education-section education)))))]]]]
 
     (pdf/pdf doc cv-filename)
     cv-filename))
