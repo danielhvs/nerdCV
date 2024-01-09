@@ -65,9 +65,12 @@
            [:paragraph {:size 14 :color content-text-color} (:company project)]
            [:heading {:style {:size 13 :color content-text-color}} (str/join " | " (:titles project))]
            [:phrase (format-summary (:description project))]
+           #_[:chunk (techs-table (:tech project))]
            [:phrase
-            [:chunk {:style :bold} (str "Technologies: ")]
-            [:chunk (str/join ", " (:tech project))]]]]]))
+              #_[:chunk {:style :bold} (str "Technologies: ")]
+              [:chunk {:style :bold}(str/join " | " (:tech project))]]]
+          #_[:pdf-cell {}
+           (techs-table (:tech project))]]]))
 
 (defn- chunk-title [text]
   [:chunk {:size 18 :styles [:bold :underline]} (str text "\n")])
