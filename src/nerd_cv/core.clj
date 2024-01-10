@@ -31,10 +31,11 @@
 (defn- parse-concact [k v]
   (let [target (:target v)] ; external link
     (if target
-      [:paragraph {:size 10} [:anchor {:styles [:underline] :target target}
-                              (if (= k :email)
-                                (:label v)
-                                (str (str/capitalize (name k)) ": " (:label v)))]]
+      [:paragraph {:size 10}
+       (when-not (= k :email)
+         [:phrase {} (str (str/capitalize (name k)) ": ")])
+       [:anchor {:styles [:underline] :target target}
+        (:label v)]]
       [:phrase {:size 10} (str "   " (name k) ": " v)])))
 
 (defn contacts-table [contacts]
@@ -160,8 +161,8 @@
                           :width-percent 100}
               [1]
               [(let [base [:pdf-table {:set-border [], :background-color white} [1]
-                           [[:pdf-cell {:set-border [:top] :border-color white} [:heading {:style {:align :center :size 20 :color content-text-color}} (:name cv)]]]
-                           [[:pdf-cell {:set-border [:top] :border-color white} [:heading {:style {:align :center :size 14 :color content-text-color}} "Software Engineer"]]]]]
+                           [[:pdf-cell {:set-border [:top] :border-color white} [:heading {:style {:align :center :size 22 :color content-text-color}} (:name cv)]]]
+                           [[:pdf-cell {:set-border [:top] :border-color white} [:heading {:style {:align :center :size 18 :color content-text-color}} "Software Engineer"]]]]]
                  (-> base
                      (into (for [_n (range 1)] (spacer)))
                      (into [[[:pdf-cell {} (contacts-table contact)]]])
