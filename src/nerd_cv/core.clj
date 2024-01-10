@@ -39,7 +39,7 @@
 
 (defn contacts-table [contacts]
   [:pdf-table {:set-border []}
-   []
+   (repeat (count (keys contacts)) 1)
    (reduce-kv (fn [acc k v]
                 (conj acc [:pdf-cell (parse-concact k v)]))
               []
@@ -58,11 +58,14 @@
                         [:phrase {:color sidebar-text-color} v]))]]]]))
 
 (defn- skill-set
-  [v]
-  [[:pdf-cell {:set-border [:top] :border-color sidebar-background}
-    [:phrase
-     [:list
-      [:phrase {:color sidebar-text-color} v]]]]])
+  [project]
+  (into []
+        [[:pdf-cell {:set-border []}
+          [:list {:symbol ""}
+           [:spacer 1]
+           [:paragraph {:size 14 :color content-text-color} (:title project)]
+           [:phrase (:description project)]]]])
+  )
 
 (defn- sidebar-skills
   [v]
@@ -124,7 +127,7 @@
                              (spacers)))
                      (into [[[:pdf-cell {:set-border [:top] :border-color sidebar-background} [:heading {:style {:size 12 :color sidebar-text-color}} "Skills"]]]])
                      (into (for [skill (:skills cv)]
-                             (skill-set skill)))
+                             (sidebar-skills skill)))
                      (into (for [_n (range 22)]
                              (spacers)))))
                (let [base [:pdf-table {:width-percent 100} [1]
@@ -165,12 +168,13 @@
                      (into [[[:pdf-cell {:set-border []} [:paragraph {} (format-summary (:summary cv))]]]])
                      (into (for [_n (range 1)] (spacer)))
                      (into [[[:pdf-cell {:set-border []} [:paragraph {:align :center} (chunk-title "Experience")]]]])
-                     (into (for [project (:projects cv)]
-                             (experience-section project)))
-                     (into [[[:pdf-cell {:set-border []}
-                              [:paragraph {:align :center} (chunk-title "Education")]]]])
-                     (into (for [education (:educations cv)]
-                             (education-section education)))))]]]]
+                     (into (for [project (:projects cv)] (experience-section project)))
+                     (into (for [_n (range 1)] (spacer)))
+                     (into [[[:pdf-cell {:set-border []} [:paragraph {:align :center} (chunk-title "Skills and Other")]]]])
+                     (into (for [skill (:skills cv)] (skill-set skill)))
+                     (into (for [_n (range 1)] (spacer)))
+                     (into [[[:pdf-cell {:set-border []} [:paragraph {:align :center} (chunk-title "Education")]]]])
+                     (into (for [education (:educations cv)] (education-section education)))))]]]]
 
     (pdf/pdf doc cv-filename)
     cv-filename))
