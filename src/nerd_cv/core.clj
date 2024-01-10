@@ -63,7 +63,10 @@
         [[:pdf-cell {:set-border []}
           [:paragraph {:size 14 :color content-text-color}
            [:chunk {:style :bold} (str (:title project) ": ")]
-           [:phrase (:description project)]]]]))
+           [:phrase (let [description (:description project)]
+                      (if (coll? description)
+                        (str/join ", " description)
+                        description))]]]]))
 
 (defn- sidebar-skills
   [v]
