@@ -168,7 +168,7 @@
                      (into [[[:pdf-cell {:set-border []} [:paragraph {:align :center} (chunk-title "Experience")]]]])
                      (into (for [project (:projects cv)] (experience-section project)))
                      (into (for [_n (range 1)] (spacer)))
-                     (into [[[:pdf-cell {:set-border []} [:paragraph {:align :center} (chunk-title "Skills and Other")]]]])
+                     (into [[[:pdf-cell {:set-border []} [:paragraph {:align :center} (chunk-title "Skills & Other")]]]])
                      (into (for [skill (:skills cv)] (skill-set skill)))
                      (into (for [_n (range 1)] (spacer)))
                      (into [[[:pdf-cell {:set-border []} [:paragraph {:align :center} (chunk-title "Education")]]]])
