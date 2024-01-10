@@ -9,7 +9,13 @@ Call the below but pass your own edn and image file.
 clj -M:runner resources/sample.edn resources/profile.jpg
 ```
 
-The result is a [cv.pdf](cv.pdf) file
+Or without an image.
+
+```
+clj -M:runner resources/sample.edn
+```
+
+The result is a [cv.pdf](cv.pdf) file or the imageless one [cv-no-image.pdf](cv-no-image.pdf)
 
 ## Usage
 
