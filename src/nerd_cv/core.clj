@@ -61,11 +61,9 @@
   [project]
   (into []
         [[:pdf-cell {:set-border []}
-          [:list {:symbol ""}
-           [:spacer 1]
-           [:paragraph {:size 14 :color content-text-color} (:title project)]
-           [:phrase (:description project)]]]])
-  )
+          [:paragraph {:size 14 :color content-text-color}
+           [:chunk {:style :bold} (str (:title project) ": ")]
+           [:phrase (:description project)]]]]))
 
 (defn- sidebar-skills
   [v]
