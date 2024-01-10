@@ -163,9 +163,19 @@
                            [[:pdf-cell {:set-border [:top] :border-color white} [:heading {:style {:align :center :size 20 :color content-text-color}} (:name cv)]]]
                            [[:pdf-cell {:set-border [:top] :border-color white} [:heading {:style {:align :center :size 14 :color content-text-color}} "Software Engineer"]]]]]
                  (-> base
-                     (into (for [_n (range 1)] (spacers-2)))
-                     (into [[[:pdf-cell {:set-border [:top]}
-                              (contacts-table contact)]]])))]]]]
+                     (into (for [_n (range 1)] (spacer)))
+                     (into [[[:pdf-cell {:set-border [:top]} (contacts-table contact)]]])
+                     (into (for [_n (range 1)] (spacer)))
+                     (into [[[:pdf-cell {:set-border []}
+                              [:paragraph {:align :center}
+                               (format-summary (:summary cv))]]]])
+                     (into [[[:pdf-cell {:set-border []} [:paragraph {:align :center} (chunk-title "Experience")]]]])
+                     (into (for [project (:projects cv)]
+                             (experience-section project)))
+                     (into [[[:pdf-cell {:set-border []}
+                              [:paragraph {:align :center} (chunk-title "Education")]]]])
+                     (into (for [education (:educations cv)]
+                             (education-section education)))))]]]]
 
     (pdf/pdf doc cv-filename)
     cv-filename))
