@@ -33,6 +33,16 @@ The result is a [cv.pdf](cv.pdf) file
 	clj -M:runner resources/sample.edn resources/profile.jpg
    ```
 
+3.1 Also test without a profile picture:
+
+   ```bash
+   make sample-2
+   ```
+
+   ```bash
+	clj -M:runner resources/sample.edn
+   ```
+
 4. Create your `data.edn` file with your information but using the same template (`resources/sample.edn`). Also include your profile picture, for example `profile.png`.
 
 5. Generate your CV:
