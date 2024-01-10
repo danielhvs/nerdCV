@@ -14,15 +14,14 @@
 (def sidebar-text-color (map #(- % 25) [255 255 255]))
 (def content-text-color (map #(+ % 25) [0 0 0]))
 
-(def left-margin 10)
-(def right-margin 10)
-(def top-margin 10)
+(def left-margin 25)
+(def right-margin 25)
+(def top-margin 25)
 (def bottom-margin 10)
 
-(defn- spacers-2
-  []
-  [[:pdf-cell {}
-    [:spacer 1]]])
+(defn- spacer
+  ([] (spacer {}))
+  ([opts] [[:pdf-cell opts [:spacer 1]]]))
 
 (defn- spacers
   []
@@ -32,20 +31,17 @@
 (defn- parse-concact [k v]
   (let [target (:target v)] ; external link
     (if target
-      [:paragraph [:anchor {:styles [:underline] :target target}
-                   (str (name k) ": " (:label v))]]
-      [:phrase {} (str "   " (name k) ": " v)])))
+      [:paragraph {:size 10} [:anchor {:styles [:underline] :target target}
+                              (if (= k :email)
+                                (:label v)
+                                (str (str/capitalize (name k)) ": " (:label v)))]]
+      [:phrase {:size 10} (str "   " (name k) ": " v)])))
 
 (defn contacts-table [contacts]
   [:pdf-table {:set-border []}
-
-   (repeat (count (keys contacts))
-           1)
+   []
    (reduce-kv (fn [acc k v]
-                (conj acc
-                      [:pdf-cell
-                       (parse-concact k v)
-                       #_[:paragraph (str k ":" v)]]))
+                (conj acc [:pdf-cell (parse-concact k v)]))
               []
               contacts)])
 
@@ -164,11 +160,10 @@
                            [[:pdf-cell {:set-border [:top] :border-color white} [:heading {:style {:align :center :size 14 :color content-text-color}} "Software Engineer"]]]]]
                  (-> base
                      (into (for [_n (range 1)] (spacer)))
-                     (into [[[:pdf-cell {:set-border [:top]} (contacts-table contact)]]])
+                     (into [[[:pdf-cell {} (contacts-table contact)]]])
                      (into (for [_n (range 1)] (spacer)))
-                     (into [[[:pdf-cell {:set-border []}
-                              [:paragraph {:align :center}
-                               (format-summary (:summary cv))]]]])
+                     (into [[[:pdf-cell {:set-border []} [:paragraph {} (format-summary (:summary cv))]]]])
+                     (into (for [_n (range 1)] (spacer)))
                      (into [[[:pdf-cell {:set-border []} [:paragraph {:align :center} (chunk-title "Experience")]]]])
                      (into (for [project (:projects cv)]
                              (experience-section project)))
