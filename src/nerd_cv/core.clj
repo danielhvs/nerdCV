@@ -96,7 +96,7 @@
           [:list {:symbol ""}
            [:spacer 1]
            [:paragraph {:size 14 :color content-text-color} (:company project)]
-           [:heading {:style {:size 13 :color content-text-color}} (str/join " | " (:titles project))]
+           [:heading {:style {:size 14 :color content-text-color}} (str/join " | " (:titles project))]
            [:phrase (format-summary (:description project))]]]]))
 
 (defn- chunk-title [text]
