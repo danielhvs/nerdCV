@@ -13,7 +13,6 @@
  :contact {:linkedin {:label "Lorem" :target "http://www.linkedin.com"}
            :github {:label "lolmoar" :target "https://github.com/"}
            :email {:label "blablabla@gmail.com" :target "mailto:blablabla@blablabla.com"}
-           :slack "@foobar"
            :phone "+9999999999999"}
  :projects [{:titles ["Backend Software Engineer" "Project Manager"]
              :company "Kojajwenm | Acre, Brazil (Remote) | May 2008 - December 2023"
