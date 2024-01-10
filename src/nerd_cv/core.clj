@@ -70,7 +70,7 @@
   [[:pdf-cell {:set-border [:top] :border-color sidebar-background}
     [:phrase
      [:list
-      [:phrase {:color sidebar-text-color} v]]]]])
+      [:phrase {:color sidebar-text-color} (:title v)]]]]])
 
 (defn- paragraph [text]
   (str "    " text))
