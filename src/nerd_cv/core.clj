@@ -14,9 +14,9 @@
 (def sidebar-text-color (map #(- % 25) [255 255 255]))
 (def content-text-color (map #(+ % 25) [0 0 0]))
 
-(def left-margin 25)
-(def right-margin 25)
-(def top-margin 25)
+(def left-margin 10)
+(def right-margin 10)
+(def top-margin 10)
 (def bottom-margin 10)
 
 (defn- spacer
@@ -164,11 +164,11 @@
                            [[:pdf-cell {:set-border [:top] :border-color white} [:heading {:style {:align :center :size 22 :color content-text-color}} (:name cv)]]]
                            [[:pdf-cell {:set-border [:top] :border-color white} [:heading {:style {:align :center :size 18 :color content-text-color}} "Software Engineer"]]]]]
                  (-> base
-                     (into (for [_n (range 1)] (spacer)))
+                     (into (for [_n (range 0)] (spacer)))
                      (into [[[:pdf-cell {} (contacts-table contact)]]])
-                     (into (for [_n (range 1)] (spacer)))
+                     (into (for [_n (range 0)] (spacer)))
                      (into [[[:pdf-cell {:set-border []} [:paragraph {} (format-summary (:summary cv))]]]])
-                     (into (for [_n (range 1)] (spacer)))
+                     (into (for [_n (range 0)] (spacer)))
                      (into [[[:pdf-cell {:set-border []} [:paragraph {:align :center} (chunk-title "Experience")]]]])
                      (into (for [project (:projects cv)] (experience-section project)))
                      (into (for [_n (range 1)] (spacer)))
